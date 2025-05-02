@@ -6,13 +6,13 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ResAuthPostDto {
+public class ResAuthSignupPostDto {
     private Long userId;
     private String loginId;
     private Role role;
 
-    public static ResAuthPostDto from(Long userId, String loginId, Role role) {
-        return ResAuthPostDto.builder()
+    public static ResAuthSignupPostDto from(Long userId, String loginId, Role role) {
+        return ResAuthSignupPostDto.builder()
                 .userId(userId)
                 .loginId(loginId)
                 .role(role)

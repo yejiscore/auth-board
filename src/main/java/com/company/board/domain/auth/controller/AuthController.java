@@ -1,7 +1,7 @@
 package com.company.board.domain.auth.controller;
 
-import com.company.board.domain.auth.dto.request.ReqAuthPostDto;
-import com.company.board.domain.auth.dto.response.ResAuthPostDto;
+import com.company.board.domain.auth.dto.request.ReqAuthSignupPostDto;
+import com.company.board.domain.auth.dto.response.ResAuthSignupPostDto;
 import com.company.board.domain.auth.service.AuthService;
 import com.company.board.global.dto.CommonResponseDto;
 import jakarta.validation.Valid;
@@ -20,10 +20,10 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<CommonResponseDto<ResAuthPostDto>> signUp(
-            @Valid @RequestBody ReqAuthPostDto request
+    public ResponseEntity<CommonResponseDto<ResAuthSignupPostDto>> signUp(
+            @Valid @RequestBody ReqAuthSignupPostDto request
     ) {
-        ResAuthPostDto response = authService.signUp(request);
+        ResAuthSignupPostDto response = authService.signUp(request);
         return ResponseEntity.ok(CommonResponseDto.success(response));
     }
 }

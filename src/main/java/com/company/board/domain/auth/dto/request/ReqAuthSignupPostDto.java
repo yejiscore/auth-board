@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ReqAuthPostDto {
+public class ReqAuthSignupPostDto {
 
     @Valid
     @NotBlank(message = "아이디를 입력해주세요.")

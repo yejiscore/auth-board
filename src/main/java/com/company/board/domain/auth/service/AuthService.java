@@ -1,7 +1,7 @@
 package com.company.board.domain.auth.service;
 
-import com.company.board.domain.auth.dto.request.ReqAuthPostDto;
-import com.company.board.domain.auth.dto.response.ResAuthPostDto;
+import com.company.board.domain.auth.dto.request.ReqAuthSignupPostDto;
+import com.company.board.domain.auth.dto.response.ResAuthSignupPostDto;
 import com.company.board.domain.auth.entity.AuthEntity;
 import com.company.board.domain.auth.repository.AuthRepository;
 import com.company.board.global.exception.CustomException;
@@ -18,7 +18,7 @@ public class AuthService {
     private final PasswordEncryptionService passwordEncryptionService;
 
     @Transactional
-    public ResAuthPostDto signUp(ReqAuthPostDto request) {
+    public ResAuthSignupPostDto signUp(ReqAuthSignupPostDto request) {
         if (authRepository.existsByLoginId(request.getLoginId())) {
             throw new CustomException(ErrorCode.AUTH_ALREADY_REGISTERED);
         }
@@ -33,7 +33,7 @@ public class AuthService {
                 )
         );
 
-        return ResAuthPostDto.from(
+        return ResAuthSignupPostDto.from(
                 saved.getUserId(),
                 saved.getLoginId(),
                 saved.getRole()
