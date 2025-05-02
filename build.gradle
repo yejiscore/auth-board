@@ -33,6 +33,8 @@ dependencies {
 
     // 유효성 검사
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {
