@@ -3,6 +3,7 @@ package com.company.board.domain.auth.dto.request;
 import com.company.board.global.model.Role;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -17,6 +18,6 @@ public class ReqAuthSignupPostDto {
     @NotBlank(message = "비밀번호를 입력해주세요.")
     private String password;
 
-    @NotBlank(message = "권한을 입력해주세요.")
+    @NotNull(message = "권한을 입력해주세요.")
     private Role role;
 }
