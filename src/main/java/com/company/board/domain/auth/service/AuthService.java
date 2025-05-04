@@ -21,39 +21,34 @@ public class AuthService {
 
     @Transactional
     public ResAuthSignupPostDto signUp(ReqAuthSignupPostDto request) {
-        if (authRepository.existsByLoginId(request.getLoginId())) {
+        if (authRepository.existsByLoginId(request.getUser().getLoginId())) {
             throw new CustomException(ErrorCode.AUTH_ALREADY_REGISTERED);
         }
 
-        String encodedPassword = passwordEncryptionService.encode(request.getPassword());
+        String encodedPassword = passwordEncryptionService.encode(request.getUser().getPassword());
 
         AuthEntity saved = authRepository.save(
                 AuthEntity.create(
-                        request.getLoginId(),
+                        request.getUser().getLoginId(),
                         encodedPassword,
-                        request.getRole()
+                        request.getUser().getRole()
                 )
         );
 
-        return ResAuthSignupPostDto.from(
-                saved.getUserId(),
-                saved.getLoginId(),
-                saved.getRole()
-        );
+        return ResAuthSignupPostDto.from(saved);
     }
 
     public ResAuthSigninPostDto signIn(ReqAuthSigninPostDto request) {
-        AuthEntity auth = authRepository.findByLoginId(request.getLoginId());
+        AuthEntity auth = authRepository.findByLoginId(request.getUser().getLoginId());
 
         if (auth == null) {
             throw new CustomException(ErrorCode.AUTH_USER_NOT_FOUND);
         }
 
-        boolean matches = auth.matchPassword(request.getPassword(), passwordEncryptionService);
-        if (!matches) {
+        if (!auth.matchPassword(request.getUser().getPassword(), passwordEncryptionService)) {
             throw new CustomException(ErrorCode.AUTH_PASSWORD_MISMATCH);
         }
 
-        return ResAuthSigninPostDto.from(auth.getUserId(), auth.getLoginId(), auth.getRole());
+        return ResAuthSigninPostDto.from(auth);
     }
 }
