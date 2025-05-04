@@ -1,6 +1,8 @@
 package com.company.board.domain.auth.controller;
 
+import com.company.board.domain.auth.dto.request.ReqAuthSigninPostDto;
 import com.company.board.domain.auth.dto.request.ReqAuthSignupPostDto;
+import com.company.board.domain.auth.dto.response.ResAuthSigninPostDto;
 import com.company.board.domain.auth.dto.response.ResAuthSignupPostDto;
 import com.company.board.domain.auth.service.AuthService;
 import com.company.board.global.dto.CommonResponseDto;
@@ -24,6 +26,13 @@ public class AuthController {
             @Valid @RequestBody ReqAuthSignupPostDto request
     ) {
         ResAuthSignupPostDto response = authService.signUp(request);
+        return ResponseEntity.ok(CommonResponseDto.success(response));
+    }
+
+    @PostMapping("/signin")
+    public ResponseEntity<CommonResponseDto<ResAuthSigninPostDto>> signin(
+            @Valid @RequestBody ReqAuthSigninPostDto request) {
+        ResAuthSigninPostDto response = authService.signIn(request);
         return ResponseEntity.ok(CommonResponseDto.success(response));
     }
 }

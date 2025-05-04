@@ -1,6 +1,8 @@
 package com.company.board.domain.auth.service;
 
+import com.company.board.domain.auth.dto.request.ReqAuthSigninPostDto;
 import com.company.board.domain.auth.dto.request.ReqAuthSignupPostDto;
+import com.company.board.domain.auth.dto.response.ResAuthSigninPostDto;
 import com.company.board.domain.auth.dto.response.ResAuthSignupPostDto;
 import com.company.board.domain.auth.entity.AuthEntity;
 import com.company.board.domain.auth.repository.AuthRepository;
@@ -38,5 +40,20 @@ public class AuthService {
                 saved.getLoginId(),
                 saved.getRole()
         );
+    }
+
+    public ResAuthSigninPostDto signIn(ReqAuthSigninPostDto request) {
+        AuthEntity auth = authRepository.findByLoginId(request.getLoginId());
+
+        if (auth == null) {
+            throw new CustomException(ErrorCode.AUTH_USER_NOT_FOUND);
+        }
+
+        boolean matches = auth.matchPassword(request.getPassword(), passwordEncryptionService);
+        if (!matches) {
+            throw new CustomException(ErrorCode.AUTH_PASSWORD_MISMATCH);
+        }
+
+        return ResAuthSigninPostDto.from(auth.getUserId(), auth.getLoginId(), auth.getRole());
     }
 }
