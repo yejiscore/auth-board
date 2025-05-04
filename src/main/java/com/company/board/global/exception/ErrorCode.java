@@ -12,6 +12,7 @@ public enum ErrorCode {
     SUCCESS(HttpStatus.OK, "000", "성공적으로 처리됐습니다."),
     NEED_LOGIN(HttpStatus.UNAUTHORIZED, "001", "로그인이 필요합니다."),
     INVALID_REQUEST(HttpStatus.BAD_REQUEST, "002", "요청값이 유효하지 않습니다."),
+    ENUM_TYPE_INVALID(HttpStatus.BAD_REQUEST, "003", "요청한 ENUM 값이 유효하지 않습니다."),
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "999", "서버 내부 오류가 발생했습니다."),
 
     // 2. Auth

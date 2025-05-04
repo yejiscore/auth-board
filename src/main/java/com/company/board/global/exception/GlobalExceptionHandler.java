@@ -1,6 +1,8 @@
 package com.company.board.global.exception;
 
+import com.company.board.global.dto.CommonResponseDto;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -25,7 +27,15 @@ public class GlobalExceptionHandler {
                 .body(ErrorResponse.of(ErrorCode.INVALID_REQUEST));
     }
 
-    // 3. 기타 예상 못 한 예외
+    // 3. Enum 타입에서 잘못된 값이 들어올 경우 발생하는 예외 처리
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<CommonResponseDto<Object>> handleInvalidEnumValue(HttpMessageNotReadableException ex) {
+        return ResponseEntity
+                .badRequest()
+                .body(CommonResponseDto.fail(ErrorCode.ENUM_TYPE_INVALID));
+    }
+
+    // 4. 기타 예상 못 한 예외
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpectedException(Exception ex) {
         return ResponseEntity
