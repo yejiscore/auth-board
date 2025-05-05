@@ -10,6 +10,6 @@ public class ErrorResponse {
     private final String message;
 
     public static ErrorResponse of(ErrorCode errorCode) {
-        return ErrorResponse.of(errorCode.name(), errorCode.getMessage());
+        return ErrorResponse.of(errorCode.getCode(), errorCode.getMessage());
     }
 }
