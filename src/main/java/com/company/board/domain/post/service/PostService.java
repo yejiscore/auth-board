@@ -83,4 +83,14 @@ public class PostService {
 
         return ResPostUpdateDto.from(post);
     }
+
+    // 삭제
+    @Transactional
+    public void delete(UUID postId) {
+        PostEntity post = postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        Long deletedBy = auditorAware.getCurrentAuditor().get();
+        post.delete(deletedBy);
+    }
 }

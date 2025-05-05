@@ -47,4 +47,10 @@ public class PostController {
     ) {
         return ResponseEntity.ok(CommonResponseDto.success(postService.update(postId, request)));
     }
+
+    @DeleteMapping("/{postId}")
+    public ResponseEntity<CommonResponseDto<Void>> deletePost(@PathVariable UUID postId) {
+        postService.delete(postId);
+        return ResponseEntity.ok(CommonResponseDto.success(null));
+    }
 }
