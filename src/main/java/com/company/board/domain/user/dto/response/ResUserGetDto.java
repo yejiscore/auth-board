@@ -24,10 +24,10 @@ public class ResUserGetDto {
 
     public static ResUserGetDto from(List<AuthEntity> authEntities) {
         List<User> userList = authEntities.stream()
-                .map(entity -> User.builder()
-                        .userId(entity.getUserId())
-                        .nickname(entity.getNickname())
-                        .role(entity.getRole())
+                .map(authEntity -> User.builder()
+                        .userId(authEntity.getUserId())
+                        .nickname(authEntity.getNickname())
+                        .role(authEntity.getRole())
                         .build())
                 .collect(Collectors.toList());
 
