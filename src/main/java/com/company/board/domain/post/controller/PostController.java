@@ -1,9 +1,11 @@
 package com.company.board.domain.post.controller;
 
 import com.company.board.domain.post.dto.request.ReqPostPostDto;
+import com.company.board.domain.post.dto.request.ReqPostUpdateDto;
 import com.company.board.domain.post.dto.response.ResPostGetByIdDto;
 import com.company.board.domain.post.dto.response.ResPostGetDto;
 import com.company.board.domain.post.dto.response.ResPostPostDto;
+import com.company.board.domain.post.dto.response.ResPostUpdateDto;
 import com.company.board.domain.post.service.PostService;
 import com.company.board.global.dto.CommonResponseDto;
 import jakarta.validation.Valid;
@@ -36,5 +38,13 @@ public class PostController {
     @GetMapping("/{postId}")
     public ResponseEntity<CommonResponseDto<ResPostGetByIdDto>> getById(@PathVariable UUID postId) {
         return ResponseEntity.ok(CommonResponseDto.success(postService.getById(postId)));
+    }
+
+    @PutMapping("/{postId}")
+    public ResponseEntity<CommonResponseDto<ResPostUpdateDto>> update(
+            @PathVariable UUID postId,
+            @RequestBody @Valid ReqPostUpdateDto request
+    ) {
+        return ResponseEntity.ok(CommonResponseDto.success(postService.update(postId, request)));
     }
 }

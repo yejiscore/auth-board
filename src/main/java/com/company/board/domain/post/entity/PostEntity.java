@@ -44,4 +44,12 @@ public class PostEntity extends BaseEntity {
                 .postContent(postContent)
                 .build();
     }
+
+    public void updateTitle(String postTitle) {
+        this.postTitle = postTitle;
+    }
+
+    public void updateContent(String postContent) {
+        this.postContent = postContent;
+    }
 }
