@@ -21,7 +21,7 @@ public class ResPostPostDto {
         private String postContent;
     }
 
-    public static ResPostPostDto fromPost(PostEntity postEntity) {
+    public static ResPostPostDto from(PostEntity postEntity) {
         return ResPostPostDto.builder()
                 .post(Post.builder()
                         .postId(postEntity.getPostId())
