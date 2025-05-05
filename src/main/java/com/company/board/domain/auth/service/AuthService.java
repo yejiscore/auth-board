@@ -21,7 +21,7 @@ public class AuthService {
 
     @Transactional
     public ResAuthSignupPostDto signUp(ReqAuthSignupPostDto request) {
-        if (authRepository.existsByLoginId(request.getUser().getLoginId())) {
+        if (authRepository.existsByNickname(request.getUser().getNickname())) {
             throw new CustomException(ErrorCode.AUTH_ALREADY_REGISTERED);
         }
 
@@ -29,7 +29,7 @@ public class AuthService {
 
         AuthEntity saved = authRepository.save(
                 AuthEntity.create(
-                        request.getUser().getLoginId(),
+                        request.getUser().getNickname(),
                         encodedPassword,
                         request.getUser().getRole()
                 )
@@ -39,7 +39,7 @@ public class AuthService {
     }
 
     public ResAuthSigninPostDto signIn(ReqAuthSigninPostDto request) {
-        AuthEntity auth = authRepository.findByLoginId(request.getUser().getLoginId());
+        AuthEntity auth = authRepository.findByNickname(request.getUser().getNickname());
 
         if (auth == null) {
             throw new CustomException(ErrorCode.AUTH_USER_NOT_FOUND);

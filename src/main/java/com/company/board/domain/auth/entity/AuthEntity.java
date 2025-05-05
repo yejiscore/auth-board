@@ -22,7 +22,7 @@ public class AuthEntity extends BaseEntity {
     private Long userId;
 
     @Column(nullable = false)
-    private String loginId;
+    private String nickname;
 
     @Column(nullable = false)
     private String password;
@@ -32,15 +32,15 @@ public class AuthEntity extends BaseEntity {
     private Role role;
 
     @Builder
-    public AuthEntity(String loginId, String password, Role role) {
-        this.loginId = loginId;
+    public AuthEntity(String nickname, String password, Role role) {
+        this.nickname = nickname;
         this.password = password;
         this.role = role;
     }
 
-    public static AuthEntity create(String loginId, String encodedPassword, Role role) {
+    public static AuthEntity create(String nickname, String encodedPassword, Role role) {
         return AuthEntity.builder()
-                .loginId(loginId)
+                .nickname(nickname)
                 .password(encodedPassword)
                 .role(role)
                 .build();

@@ -18,7 +18,7 @@ public class ResUserGetDto {
     @Builder
     public static class User {
         private Long userId;
-        private String loginId;
+        private String nickname;
         private Role role;
     }
 
@@ -26,7 +26,7 @@ public class ResUserGetDto {
         List<User> userList = authEntities.stream()
                 .map(entity -> User.builder()
                         .userId(entity.getUserId())
-                        .loginId(entity.getLoginId())
+                        .nickname(entity.getNickname())
                         .role(entity.getRole())
                         .build())
                 .collect(Collectors.toList());

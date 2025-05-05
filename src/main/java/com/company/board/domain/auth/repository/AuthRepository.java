@@ -4,6 +4,6 @@ import com.company.board.domain.auth.entity.AuthEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AuthRepository extends JpaRepository<AuthEntity, Long> {
-    boolean existsByLoginId(String loginId);
-    AuthEntity findByLoginId(String loginId);
+    boolean existsByNickname(String nickname);
+    AuthEntity findByNickname(String nickname);
 }

@@ -15,7 +15,7 @@ public class ResAuthSignupPostDto {
     @Builder
     public static class User {
         private Long userId;
-        private String loginId;
+        private String nickname;
         private Role role;
     }
 
@@ -23,7 +23,7 @@ public class ResAuthSignupPostDto {
         return ResAuthSignupPostDto.builder()
                 .user(User.builder()
                         .userId(authEntity.getUserId())
-                        .loginId(authEntity.getLoginId())
+                        .nickname(authEntity.getNickname())
                         .role(authEntity.getRole())
                         .build())
                 .build();
