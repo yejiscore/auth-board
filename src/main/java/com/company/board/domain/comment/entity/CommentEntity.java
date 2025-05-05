@@ -1,6 +1,7 @@
 package com.company.board.domain.comment.entity;
 
 import com.company.board.domain.post.entity.PostEntity;
+import com.company.board.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @Entity
 @Table(name = "p_comments")
 @SQLRestriction("deleted_at IS NULL")
-public class CommentEntity {
+public class CommentEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
