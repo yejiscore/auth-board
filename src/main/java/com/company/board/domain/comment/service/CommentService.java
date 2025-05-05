@@ -38,7 +38,7 @@ public class CommentService {
         Long authorId = auditorAware.getCurrentAuditor().get();
 
         PostEntity post = postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_POST_NOT_FOUND));
 
         CommentEntity saved = commentRepository.save(
                 CommentEntity.create(post, authorId, content)
@@ -50,6 +50,11 @@ public class CommentService {
     // 전체 조회
     @Transactional(readOnly = true)
     public ResCommentGetDto getCommentsByPostId(UUID postId) {
+
+        // 존재하는 게시글인지 검증
+        postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_POST_NOT_FOUND));
+
         List<CommentEntity> comments = commentRepository.findAllByPost_PostId(postId);
         return ResCommentGetDto.from(comments);
     }
@@ -57,15 +62,19 @@ public class CommentService {
     // 단건 조회
     @Transactional(readOnly = true)
     public ResCommentGetByIdDto getCommentById(UUID postId, UUID commentId) {
+
+        // 존재하는 게시글인지 검증
+        postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_POST_NOT_FOUND));
+
         CommentEntity comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
         // 해당 댓글이 요청한 게시글에 속해 있는지 검증
         if (!comment.getPost().getPostId().equals(postId)) {
-            throw new CustomException(ErrorCode.INVALID_REQUEST);
+            throw new CustomException(ErrorCode.COMMENT_POST_MISMATCH);
         }
 
         return ResCommentGetByIdDto.from(comment);
     }
-
 }
