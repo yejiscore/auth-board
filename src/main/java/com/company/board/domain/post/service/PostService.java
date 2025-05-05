@@ -28,14 +28,21 @@ public class PostService {
     // 생성
     @Transactional
     public ResPostPostDto create(ReqPostPostDto request) {
+        String title = request.getPost().getPostTitle();
+        String content = request.getPost().getPostContent();
+
+        if (title == null || title.trim().isEmpty()) {
+            throw new CustomException(ErrorCode.POST_TITLE_EMPTY);
+        }
+
+        if (content == null || content.trim().isEmpty()) {
+            throw new CustomException(ErrorCode.POST_CONTENT_EMPTY);
+        }
+
         Long authorId = auditorAware.getCurrentAuditor().get();
 
         PostEntity saved = postRepository.save(
-                PostEntity.create(
-                        authorId,
-                        request.getPost().getPostTitle(),
-                        request.getPost().getPostContent()
-                )
+                PostEntity.create(authorId, title, content)
         );
 
         return ResPostPostDto.from(saved);
@@ -89,6 +96,11 @@ public class PostService {
     public void delete(UUID postId) {
         PostEntity post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+
+        // 이미 삭제된 경우
+        if (post.getDeletedAt() != null) {
+            throw new CustomException(ErrorCode.POST_ALREADY_DELETED);
+        }
 
         Long deletedBy = auditorAware.getCurrentAuditor().get();
         post.delete(deletedBy);
