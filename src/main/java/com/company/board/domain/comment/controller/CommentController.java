@@ -1,9 +1,13 @@
 package com.company.board.domain.comment.controller;
 
 import com.company.board.domain.comment.dto.request.ReqCommentPostDto;
+import com.company.board.domain.comment.dto.response.ResCommentGetByIdDto;
+import com.company.board.domain.comment.dto.response.ResCommentGetDto;
 import com.company.board.domain.comment.dto.response.ResCommentPostDto;
 import com.company.board.domain.comment.service.CommentService;
 import com.company.board.global.dto.CommonResponseDto;
+import com.company.board.global.exception.CustomException;
+import com.company.board.global.exception.ErrorCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +28,23 @@ public class CommentController {
             @Valid @RequestBody ReqCommentPostDto request
     ) {
         ResCommentPostDto response = commentService.create(postId, request);
+        return ResponseEntity.ok(CommonResponseDto.success(response));
+    }
+
+    @GetMapping
+    public ResponseEntity<CommonResponseDto<ResCommentGetDto>> getCommentsByPostId(
+            @PathVariable UUID postId
+    ) {
+        ResCommentGetDto response = commentService.getCommentsByPostId(postId);
+        return ResponseEntity.ok(CommonResponseDto.success(response));
+    }
+
+    @GetMapping("/{commentId}")
+    public ResponseEntity<CommonResponseDto<ResCommentGetByIdDto>> getCommentById(
+            @PathVariable UUID postId,
+            @PathVariable UUID commentId
+    ) {
+        ResCommentGetByIdDto response = commentService.getCommentById(postId, commentId);
         return ResponseEntity.ok(CommonResponseDto.success(response));
     }
 }
