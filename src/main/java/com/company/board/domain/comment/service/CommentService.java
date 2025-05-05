@@ -110,4 +110,30 @@ public class CommentService {
 
         return ResCommentGetByIdDto.from(comment);
     }
+
+    // 삭제
+    @Transactional
+    public void delete(UUID postId, UUID commentId) {
+
+        // 존재하는 게시글인지 확인
+        postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_POST_NOT_FOUND));
+
+        CommentEntity comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+
+        // 댓글이 해당 게시글에 속해 있는지 확인
+        if (!comment.getPost().getPostId().equals(postId)) {
+            throw new CustomException(ErrorCode.COMMENT_POST_MISMATCH);
+        }
+
+        // 이미 삭제된 댓글인지 확인
+        if (comment.getDeletedAt() != null) {
+            throw new CustomException(ErrorCode.COMMENT_ALREADY_DELETED);
+        }
+
+        Long deletedBy = auditorAware.getCurrentAuditor().get();
+        comment.delete(deletedBy);
+    }
+
 }

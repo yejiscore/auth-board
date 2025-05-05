@@ -58,4 +58,13 @@ public class CommentController {
         ResCommentGetByIdDto response = commentService.update(postId, commentId, request);
         return ResponseEntity.ok(CommonResponseDto.success(response));
     }
+
+    @DeleteMapping("/{commentId}")
+    public ResponseEntity<CommonResponseDto<Void>> delete(
+            @PathVariable UUID postId,
+            @PathVariable UUID commentId
+    ) {
+        commentService.delete(postId, commentId);
+        return ResponseEntity.ok(CommonResponseDto.success(null));
+    }
 }
