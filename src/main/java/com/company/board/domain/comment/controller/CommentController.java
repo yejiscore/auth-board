@@ -1,6 +1,7 @@
 package com.company.board.domain.comment.controller;
 
 import com.company.board.domain.comment.dto.request.ReqCommentPostDto;
+import com.company.board.domain.comment.dto.request.ReqCommentUpdateDto;
 import com.company.board.domain.comment.dto.response.ResCommentGetByIdDto;
 import com.company.board.domain.comment.dto.response.ResCommentGetDto;
 import com.company.board.domain.comment.dto.response.ResCommentPostDto;
@@ -23,7 +24,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PostMapping
-    public ResponseEntity<CommonResponseDto<ResCommentPostDto>> createComment(
+    public ResponseEntity<CommonResponseDto<ResCommentPostDto>> create(
             @PathVariable UUID postId,
             @Valid @RequestBody ReqCommentPostDto request
     ) {
@@ -32,19 +33,29 @@ public class CommentController {
     }
 
     @GetMapping
-    public ResponseEntity<CommonResponseDto<ResCommentGetDto>> getCommentsByPostId(
+    public ResponseEntity<CommonResponseDto<ResCommentGetDto>> getAll(
             @PathVariable UUID postId
     ) {
-        ResCommentGetDto response = commentService.getCommentsByPostId(postId);
+        ResCommentGetDto response = commentService.getAll(postId);
         return ResponseEntity.ok(CommonResponseDto.success(response));
     }
 
     @GetMapping("/{commentId}")
-    public ResponseEntity<CommonResponseDto<ResCommentGetByIdDto>> getCommentById(
+    public ResponseEntity<CommonResponseDto<ResCommentGetByIdDto>> getById(
             @PathVariable UUID postId,
             @PathVariable UUID commentId
     ) {
-        ResCommentGetByIdDto response = commentService.getCommentById(postId, commentId);
+        ResCommentGetByIdDto response = commentService.getById(postId, commentId);
+        return ResponseEntity.ok(CommonResponseDto.success(response));
+    }
+
+    @PutMapping("/{commentId}")
+    public ResponseEntity<CommonResponseDto<ResCommentGetByIdDto>> update(
+            @PathVariable UUID postId,
+            @PathVariable UUID commentId,
+            @Valid @RequestBody ReqCommentUpdateDto request
+    ) {
+        ResCommentGetByIdDto response = commentService.update(postId, commentId, request);
         return ResponseEntity.ok(CommonResponseDto.success(response));
     }
 }

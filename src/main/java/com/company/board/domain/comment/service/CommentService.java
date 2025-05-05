@@ -1,6 +1,7 @@
 package com.company.board.domain.comment.service;
 
 import com.company.board.domain.comment.dto.request.ReqCommentPostDto;
+import com.company.board.domain.comment.dto.request.ReqCommentUpdateDto;
 import com.company.board.domain.comment.dto.response.ResCommentGetByIdDto;
 import com.company.board.domain.comment.dto.response.ResCommentGetDto;
 import com.company.board.domain.comment.dto.response.ResCommentPostDto;
@@ -49,9 +50,9 @@ public class CommentService {
 
     // 전체 조회
     @Transactional(readOnly = true)
-    public ResCommentGetDto getCommentsByPostId(UUID postId) {
+    public ResCommentGetDto getAll(UUID postId) {
 
-        // 존재하는 게시글인지 검증
+        // 존재하는 게시글인지 확인
         postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_POST_NOT_FOUND));
 
@@ -61,19 +62,51 @@ public class CommentService {
 
     // 단건 조회
     @Transactional(readOnly = true)
-    public ResCommentGetByIdDto getCommentById(UUID postId, UUID commentId) {
+    public ResCommentGetByIdDto getById(UUID postId, UUID commentId) {
 
-        // 존재하는 게시글인지 검증
+        // 존재하는 게시글인지 확인
         postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_POST_NOT_FOUND));
 
         CommentEntity comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
 
-        // 해당 댓글이 요청한 게시글에 속해 있는지 검증
+        // 해당 댓글이 요청한 게시글에 속해 있는지 확인
         if (!comment.getPost().getPostId().equals(postId)) {
             throw new CustomException(ErrorCode.COMMENT_POST_MISMATCH);
         }
+
+        return ResCommentGetByIdDto.from(comment);
+    }
+
+    // 수정
+    @Transactional
+    public ResCommentGetByIdDto update(UUID postId, UUID commentId, ReqCommentUpdateDto request) {
+
+        // 존재하는 게시글인지 확인
+        postRepository.findById(postId)
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_POST_NOT_FOUND));
+
+        // 존재하는 댓글인지 확인
+        CommentEntity comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+
+        // 댓글이 해당 게시글에 속해 있는지 확인
+        if (!comment.getPost().getPostId().equals(postId)) {
+            throw new CustomException(ErrorCode.COMMENT_POST_MISMATCH);
+        }
+
+        // 변경 여부 체크
+        String newContent = request.getComment().getCommentContent();
+        if (newContent == null || newContent.trim().isEmpty()) {
+            throw new CustomException(ErrorCode.COMMENT_CONTENT_EMPTY);
+        }
+
+        if (newContent.equals(comment.getCommentContent())) {
+            throw new CustomException(ErrorCode.NO_CHANGES_DETECTED);
+        }
+
+        comment.update(newContent);
 
         return ResCommentGetByIdDto.from(comment);
     }
