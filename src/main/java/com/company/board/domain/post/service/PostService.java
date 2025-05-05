@@ -115,6 +115,14 @@ public class PostService {
         }
 
         Long deletedBy = auditorAware.getCurrentAuditor().get();
+
+        // 해당 게시글에 달린 댓글도 삭제
+        List<CommentEntity> comments = commentRepository.findAllByPost_PostId(postId);
+
+        if (!comments.isEmpty()) {
+            comments.forEach(comment -> comment.delete(deletedBy));
+        }
+
         post.delete(deletedBy);
     }
 }
