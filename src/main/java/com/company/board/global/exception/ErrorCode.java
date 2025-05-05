@@ -39,10 +39,9 @@ public enum ErrorCode {
     // 5. Comment
     COMMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "C100", "존재하지 않는 댓글입니다."),
     COMMENT_NOT_AUTHOR(HttpStatus.FORBIDDEN, "C200", "댓글 작성자가 아닙니다."),
-    COMMENT_TITLE_EMPTY(HttpStatus.BAD_REQUEST, "C300", "댓글 제목이 비어 있습니다."),
-    COMMENT_CONTENT_EMPTY(HttpStatus.BAD_REQUEST, "C400", "댓글 내용이 비어 있습니다."),
-    COMMENT_ALREADY_DELETED(HttpStatus.BAD_REQUEST, "C500", "해당 댓글은 이미 삭제되었습니다."),
-    COMMENT_FORBIDDEN(HttpStatus.FORBIDDEN, "C600", "해당 댓글을 조회할 권한이 없습니다.");
+    COMMENT_CONTENT_EMPTY(HttpStatus.BAD_REQUEST, "C300", "댓글 내용이 비어 있습니다."),
+    COMMENT_ALREADY_DELETED(HttpStatus.BAD_REQUEST, "C400", "해당 댓글은 이미 삭제되었습니다."),
+    COMMENT_FORBIDDEN(HttpStatus.FORBIDDEN, "C500", "해당 댓글을 조회할 권한이 없습니다.");
 
     private final HttpStatus status;
     private final String code;
