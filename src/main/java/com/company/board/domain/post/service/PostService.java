@@ -1,5 +1,7 @@
 package com.company.board.domain.post.service;
 
+import com.company.board.domain.comment.entity.CommentEntity;
+import com.company.board.domain.comment.repository.CommentRepository;
 import com.company.board.domain.post.dto.request.ReqPostPostDto;
 import com.company.board.domain.post.dto.request.ReqPostUpdateDto;
 import com.company.board.domain.post.dto.response.ResPostGetByIdDto;
@@ -16,13 +18,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class PostService {
 
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
     private final AuditorAware<Long> auditorAware;
 
     // 생성
@@ -51,7 +56,12 @@ public class PostService {
     // 전체 조회
     public ResPostGetDto getAll() {
         List<PostEntity> posts = postRepository.findAll();
-        return ResPostGetDto.from(posts);
+        List<CommentEntity> allComments = commentRepository.findAll();
+
+        Map<UUID, List<CommentEntity>> commentMap = allComments.stream()
+                .collect(Collectors.groupingBy(c -> c.getPost().getPostId()));
+
+        return ResPostGetDto.from(posts, commentMap);
     }
 
     // 단건 조회
@@ -59,7 +69,9 @@ public class PostService {
         PostEntity post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
 
-        return ResPostGetByIdDto.from(post);
+        List<CommentEntity> comments = commentRepository.findAllByPost_PostId(post.getPostId());
+
+        return ResPostGetByIdDto.from(post, comments);
     }
 
     // 수정
