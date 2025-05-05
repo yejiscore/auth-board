@@ -10,6 +10,7 @@ import com.company.board.domain.user.dto.response.ResUserUpdateDto;
 import com.company.board.global.exception.CustomException;
 import com.company.board.global.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ public class UserService {
 
     private final AuthRepository authRepository;
     private final PasswordEncryptionService passwordEncryptionService;
+    private final AuditorAware<Long> auditorAware;
 
     public ResUserGetDto getAll() {
         List<AuthEntity> users = authRepository.findAll();
@@ -69,5 +71,14 @@ public class UserService {
         }
 
         return ResUserUpdateDto.from(user);
+    }
+
+    // 삭제
+    @Transactional
+    public void deleteUser(Long userId) {
+        AuthEntity user = authRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.AUTH_USER_NOT_FOUND));
+
+        user.delete(auditorAware.getCurrentAuditor().get());
     }
 }

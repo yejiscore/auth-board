@@ -39,4 +39,11 @@ public class UserController {
         ResUserUpdateDto response = userService.updateUser(userId, request);
         return ResponseEntity.ok(CommonResponseDto.success(response));
     }
+
+    // 삭제
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<CommonResponseDto<Void>> deleteUser(@PathVariable Long userId) {
+        userService.deleteUser(userId);
+        return ResponseEntity.ok(CommonResponseDto.success(null));
+    }
 }
