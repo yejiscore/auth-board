@@ -16,10 +16,13 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/v1/auth/signup", "/v1/auth/signin").permitAll()
-                        .anyRequest().authenticated()
-                );
+                        // 개발 단계에서는 모든 요청을 허용
+                        .anyRequest().permitAll()
+                        // TODO: Security 작업 후 아래 설정으로 전환 필요 (회원가입/로그인만 허용)
+//                        .requestMatchers("/v1/auth/signup", "/v1/auth/signin").permitAll()
+//                        .anyRequest().authenticated()
 
+                );
         return http.build();
     }
 }
