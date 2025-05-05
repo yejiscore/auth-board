@@ -16,16 +16,14 @@
 - [X] 유저 전체 조회
 - [X] 유저 단건 조회
 - [X] 유저 수정
-- [ ] 유저 soft delete
-- [ ] 유저 조회할 때 soft delete 제외
+- [X] 유저 soft delete
 
 #### 📌 Post
-- [ ] 게시글 생성
+- [X] 게시글 생성
 - [ ] 게시글 전체 조회
 - [ ] 게시글 단건 조회
 - [ ] 게시글 수정
-- [ ] 게시글 soft delete - 권한 : 게시글 작성자, ADMIN, MASTER
-- [ ] 게시글 조회할 때 soft delete 제외
+- [ ] 게시글 soft delete
 - [ ] 게시글 조회할 때 해당 게시글에 달린 댓글도 조회
 - [ ] 게시글 삭제할 때 해당 게시글에 달린 댓글도 삭제
 
@@ -34,8 +32,7 @@
 - [ ] 댓글 전체 조회
 - [ ] 댓글 단건 조회
 - [ ] 댓글 수정
-- [ ] 댓글 soft delete - 권한 : 댓글 작성자, 게시글 작성자, ADMIN, MASTER
-- [ ] 댓글 조회할 때 soft delete 제외
+- [ ] 댓글 soft delete
 
 <br>
 
