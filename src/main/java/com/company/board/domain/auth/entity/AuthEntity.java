@@ -49,4 +49,16 @@ public class AuthEntity extends BaseEntity {
     public boolean matchPassword(String rawPassword, PasswordEncryptionService encoder) {
         return encoder.matches(rawPassword, this.password);
     }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updatePassword(String encryptedPassword) {
+        this.password = encryptedPassword;
+    }
+
+    public void updateRole(Role role) {
+        this.role = role;
+    }
 }
