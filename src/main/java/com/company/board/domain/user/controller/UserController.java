@@ -32,18 +32,18 @@ public class UserController {
 
     // 수정
     @PutMapping("/{userId}")
-    public ResponseEntity<CommonResponseDto<ResUserUpdateDto>> updateUser(
+    public ResponseEntity<CommonResponseDto<ResUserUpdateDto>> update(
             @PathVariable Long userId,
             @RequestBody @Valid ReqUserUpdateDto request
     ) {
-        ResUserUpdateDto response = userService.updateUser(userId, request);
+        ResUserUpdateDto response = userService.update(userId, request);
         return ResponseEntity.ok(CommonResponseDto.success(response));
     }
 
     // 삭제
     @DeleteMapping("/{userId}")
-    public ResponseEntity<CommonResponseDto<Void>> deleteUser(@PathVariable Long userId) {
-        userService.deleteUser(userId);
+    public ResponseEntity<CommonResponseDto<Void>> delete(@PathVariable Long userId) {
+        userService.delete(userId);
         return ResponseEntity.ok(CommonResponseDto.success(null));
     }
 }

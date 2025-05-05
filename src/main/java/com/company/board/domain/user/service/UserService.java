@@ -37,7 +37,7 @@ public class UserService {
     }
 
     @Transactional
-    public ResUserUpdateDto updateUser(Long userId, ReqUserUpdateDto request) {
+    public ResUserUpdateDto update(Long userId, ReqUserUpdateDto request) {
         AuthEntity user = authRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.AUTH_USER_NOT_FOUND));
 
@@ -75,7 +75,7 @@ public class UserService {
 
     // 삭제
     @Transactional
-    public void deleteUser(Long userId) {
+    public void delete(Long userId) {
         AuthEntity user = authRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.AUTH_USER_NOT_FOUND));
 
