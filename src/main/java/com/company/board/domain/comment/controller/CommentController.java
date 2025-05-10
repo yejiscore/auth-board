@@ -7,8 +7,6 @@ import com.company.board.domain.comment.dto.response.ResCommentGetDto;
 import com.company.board.domain.comment.dto.response.ResCommentPostDto;
 import com.company.board.domain.comment.service.CommentService;
 import com.company.board.global.dto.CommonResponseDto;
-import com.company.board.global.exception.CustomException;
-import com.company.board.global.exception.ErrorCode;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
