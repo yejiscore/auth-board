@@ -1,6 +1,7 @@
 package com.company.board.global.dto;
 
-import com.company.board.global.exception.ErrorCode;
+import com.company.board.global.exception.BaseErrorCode;
+import com.company.board.global.exception.CommonErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,13 +19,13 @@ public class CommonResponseDto<T> {
 
     public static <T> CommonResponseDto<T> success(T data) {
         return CommonResponseDto.<T>builder()
-                .code(ErrorCode.SUCCESS.getCode())
-                .message(ErrorCode.SUCCESS.getMessage())
+                .code(CommonErrorCode.SUCCESS.getCode())
+                .message(CommonErrorCode.SUCCESS.getMessage())
                 .data(data)
                 .build();
     }
 
-    public static <T> CommonResponseDto<T> fail(ErrorCode errorCode) {
+    public static <T> CommonResponseDto<T> fail(BaseErrorCode errorCode) {
         return CommonResponseDto.<T>builder()
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())

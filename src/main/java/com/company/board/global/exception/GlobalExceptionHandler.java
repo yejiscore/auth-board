@@ -13,7 +13,7 @@ public class GlobalExceptionHandler {
     // 1. 커스텀 예외 처리
     @ExceptionHandler(CustomException.class)
     public ResponseEntity<ErrorResponse> handleCustomException(CustomException ex) {
-        ErrorCode code = ex.getErrorCode();
+        BaseErrorCode code = ex.getErrorCode();
         return ResponseEntity
                 .status(code.getStatus())
                 .body(ErrorResponse.of(code));
@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleValidationException(MethodArgumentNotValidException ex) {
         return ResponseEntity
                 .badRequest()
-                .body(ErrorResponse.of(ErrorCode.INVALID_REQUEST));
+                .body(ErrorResponse.of(CommonErrorCode.INVALID_REQUEST));
     }
 
     // 3. Enum 타입에서 잘못된 값이 들어올 경우 발생하는 예외 처리
@@ -32,14 +32,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<CommonResponseDto<Object>> handleInvalidEnumValue(HttpMessageNotReadableException ex) {
         return ResponseEntity
                 .badRequest()
-                .body(CommonResponseDto.fail(ErrorCode.ENUM_TYPE_INVALID));
+                .body(CommonResponseDto.fail(CommonErrorCode.ENUM_TYPE_INVALID));
     }
 
     // 4. 기타 예상 못 한 예외
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleUnexpectedException(Exception ex) {
         return ResponseEntity
-                .status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus())
-                .body(ErrorResponse.of(ErrorCode.INTERNAL_SERVER_ERROR));
+                .status(CommonErrorCode.INTERNAL_SERVER_ERROR.getStatus())
+                .body(ErrorResponse.of(CommonErrorCode.INTERNAL_SERVER_ERROR));
     }
 }
