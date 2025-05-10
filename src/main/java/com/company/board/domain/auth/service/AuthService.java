@@ -7,7 +7,7 @@ import com.company.board.domain.auth.dto.response.ResAuthSignupPostDto;
 import com.company.board.domain.auth.entity.AuthEntity;
 import com.company.board.domain.auth.repository.AuthRepository;
 import com.company.board.global.exception.CustomException;
-import com.company.board.global.exception.ErrorCode;
+import com.company.board.domain.auth.exception.AuthErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +22,7 @@ public class AuthService {
     @Transactional
     public ResAuthSignupPostDto signUp(ReqAuthSignupPostDto request) {
         if (authRepository.existsByNickname(request.getUser().getNickname())) {
-            throw new CustomException(ErrorCode.AUTH_ALREADY_REGISTERED);
+            throw new CustomException(AuthErrorCode.AUTH_ALREADY_REGISTERED);
         }
 
         String encodedPassword = passwordEncryptionService.encode(request.getUser().getPassword());
@@ -42,11 +42,11 @@ public class AuthService {
         AuthEntity auth = authRepository.findByNickname(request.getUser().getNickname());
 
         if (auth == null) {
-            throw new CustomException(ErrorCode.AUTH_USER_NOT_FOUND);
+            throw new CustomException(AuthErrorCode.AUTH_USER_NOT_FOUND);
         }
 
         if (!auth.matchPassword(request.getUser().getPassword(), passwordEncryptionService)) {
-            throw new CustomException(ErrorCode.AUTH_PASSWORD_MISMATCH);
+            throw new CustomException(AuthErrorCode.AUTH_PASSWORD_MISMATCH);
         }
 
         return ResAuthSigninPostDto.from(auth);

@@ -10,8 +10,9 @@ import com.company.board.domain.post.dto.response.ResPostPostDto;
 import com.company.board.domain.post.dto.response.ResPostUpdateDto;
 import com.company.board.domain.post.entity.PostEntity;
 import com.company.board.domain.post.repository.PostRepository;
+import com.company.board.global.exception.CommonErrorCode;
 import com.company.board.global.exception.CustomException;
-import com.company.board.global.exception.ErrorCode;
+import com.company.board.domain.post.exception.PostErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Service;
@@ -37,11 +38,11 @@ public class PostService {
         String content = request.getPost().getPostContent();
 
         if (title == null || title.trim().isEmpty()) {
-            throw new CustomException(ErrorCode.POST_TITLE_EMPTY);
+            throw new CustomException(PostErrorCode.POST_TITLE_EMPTY);
         }
 
         if (content == null || content.trim().isEmpty()) {
-            throw new CustomException(ErrorCode.POST_CONTENT_EMPTY);
+            throw new CustomException(PostErrorCode.POST_CONTENT_EMPTY);
         }
 
         Long authorId = auditorAware.getCurrentAuditor().get();
@@ -67,7 +68,7 @@ public class PostService {
     // 단건 조회
     public ResPostGetByIdDto getById(UUID postId) {
         PostEntity post = postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(PostErrorCode.POST_NOT_FOUND));
 
         List<CommentEntity> comments = commentRepository.findAllByPost_PostId(post.getPostId());
 
@@ -78,7 +79,7 @@ public class PostService {
     @Transactional
     public ResPostUpdateDto update(UUID postId, ReqPostUpdateDto request) {
         PostEntity post = postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(PostErrorCode.POST_NOT_FOUND));
 
         // 변경이 제대로 이루어져있는 확인
         boolean updated = false;
@@ -97,7 +98,7 @@ public class PostService {
 
         // 변경된 값이 없을 때 Error
         if (!updated) {
-            throw new CustomException(ErrorCode.NO_CHANGES_DETECTED);
+            throw new CustomException(CommonErrorCode.NO_CHANGES_DETECTED);
         }
 
         return ResPostUpdateDto.from(post);
@@ -107,11 +108,11 @@ public class PostService {
     @Transactional
     public void delete(UUID postId) {
         PostEntity post = postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(ErrorCode.POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(PostErrorCode.POST_NOT_FOUND));
 
         // 이미 삭제된 경우
         if (post.getDeletedAt() != null) {
-            throw new CustomException(ErrorCode.POST_ALREADY_DELETED);
+            throw new CustomException(PostErrorCode.POST_ALREADY_DELETED);
         }
 
         Long deletedBy = auditorAware.getCurrentAuditor().get();

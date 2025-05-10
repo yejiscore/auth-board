@@ -10,8 +10,9 @@ import com.company.board.domain.comment.repository.CommentRepository;
 import com.company.board.domain.post.entity.PostEntity;
 import com.company.board.domain.post.repository.PostRepository;
 import com.company.board.global.config.AuditorAwareImpl;
+import com.company.board.global.exception.CommonErrorCode;
 import com.company.board.global.exception.CustomException;
-import com.company.board.global.exception.ErrorCode;
+import com.company.board.domain.comment.exception.CommentErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,13 +34,13 @@ public class CommentService {
         String content = request.getComment().getCommentContent();
 
         if (content == null || content.trim().isEmpty()) {
-            throw new CustomException(ErrorCode.COMMENT_CONTENT_EMPTY);
+            throw new CustomException(CommentErrorCode.COMMENT_CONTENT_EMPTY);
         }
 
         Long authorId = auditorAware.getCurrentAuditor().get();
 
         PostEntity post = postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(CommentErrorCode.COMMENT_POST_NOT_FOUND));
 
         CommentEntity saved = commentRepository.save(
                 CommentEntity.create(post, authorId, content)
@@ -54,7 +55,7 @@ public class CommentService {
 
         // 존재하는 게시글인지 확인
         postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(CommentErrorCode.COMMENT_POST_NOT_FOUND));
 
         List<CommentEntity> comments = commentRepository.findAllByPost_PostId(postId);
         return ResCommentGetDto.from(comments);
@@ -66,14 +67,14 @@ public class CommentService {
 
         // 존재하는 게시글인지 확인
         postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(CommentErrorCode.COMMENT_POST_NOT_FOUND));
 
         CommentEntity comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(CommentErrorCode.COMMENT_NOT_FOUND));
 
         // 해당 댓글이 요청한 게시글에 속해 있는지 확인
         if (!comment.getPost().getPostId().equals(postId)) {
-            throw new CustomException(ErrorCode.COMMENT_POST_MISMATCH);
+            throw new CustomException(CommentErrorCode.COMMENT_POST_MISMATCH);
         }
 
         return ResCommentGetByIdDto.from(comment);
@@ -85,25 +86,25 @@ public class CommentService {
 
         // 존재하는 게시글인지 확인
         postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(CommentErrorCode.COMMENT_POST_NOT_FOUND));
 
         // 존재하는 댓글인지 확인
         CommentEntity comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(CommentErrorCode.COMMENT_NOT_FOUND));
 
         // 댓글이 해당 게시글에 속해 있는지 확인
         if (!comment.getPost().getPostId().equals(postId)) {
-            throw new CustomException(ErrorCode.COMMENT_POST_MISMATCH);
+            throw new CustomException(CommentErrorCode.COMMENT_POST_MISMATCH);
         }
 
         // 변경 여부 체크
         String newContent = request.getComment().getCommentContent();
         if (newContent == null || newContent.trim().isEmpty()) {
-            throw new CustomException(ErrorCode.COMMENT_CONTENT_EMPTY);
+            throw new CustomException(CommentErrorCode.COMMENT_CONTENT_EMPTY);
         }
 
         if (newContent.equals(comment.getCommentContent())) {
-            throw new CustomException(ErrorCode.NO_CHANGES_DETECTED);
+            throw new CustomException(CommonErrorCode.NO_CHANGES_DETECTED);
         }
 
         comment.update(newContent);
@@ -117,19 +118,19 @@ public class CommentService {
 
         // 존재하는 게시글인지 확인
         postRepository.findById(postId)
-                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_POST_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(CommentErrorCode.COMMENT_POST_NOT_FOUND));
 
         CommentEntity comment = commentRepository.findById(commentId)
-                .orElseThrow(() -> new CustomException(ErrorCode.COMMENT_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(CommentErrorCode.COMMENT_NOT_FOUND));
 
         // 댓글이 해당 게시글에 속해 있는지 확인
         if (!comment.getPost().getPostId().equals(postId)) {
-            throw new CustomException(ErrorCode.COMMENT_POST_MISMATCH);
+            throw new CustomException(CommentErrorCode.COMMENT_POST_MISMATCH);
         }
 
         // 이미 삭제된 댓글인지 확인
         if (comment.getDeletedAt() != null) {
-            throw new CustomException(ErrorCode.COMMENT_ALREADY_DELETED);
+            throw new CustomException(CommentErrorCode.COMMENT_ALREADY_DELETED);
         }
 
         Long deletedBy = auditorAware.getCurrentAuditor().get();

@@ -7,8 +7,9 @@ import com.company.board.domain.user.dto.request.ReqUserUpdateDto;
 import com.company.board.domain.user.dto.response.ResUserGetByIdDto;
 import com.company.board.domain.user.dto.response.ResUserGetDto;
 import com.company.board.domain.user.dto.response.ResUserUpdateDto;
+import com.company.board.global.exception.CommonErrorCode;
 import com.company.board.global.exception.CustomException;
-import com.company.board.global.exception.ErrorCode;
+import com.company.board.domain.user.exception.UserErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Service;
@@ -32,14 +33,14 @@ public class UserService {
 
     public ResUserGetByIdDto getById(Long userId) {
         AuthEntity user = authRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.AUTH_USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
         return ResUserGetByIdDto.from(user);
     }
 
     @Transactional
     public ResUserUpdateDto update(Long userId, ReqUserUpdateDto request) {
         AuthEntity user = authRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.AUTH_USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
 
         // 변경이 제대로 이루어져있는 확인
         boolean updated = false;
@@ -48,7 +49,7 @@ public class UserService {
         if (request.getUser().getNickname() != null
                 && !user.getNickname().equals(request.getUser().getNickname())) {
             if (authRepository.existsByNicknameAndUserIdNot(request.getUser().getNickname(), userId)) {
-                throw new CustomException(ErrorCode.USER_NICKNAME_ALREADY_EXISTS);
+                throw new CustomException(UserErrorCode.USER_NICKNAME_ALREADY_EXISTS);
             }
             user.updateNickname(request.getUser().getNickname());
             updated = true;
@@ -67,7 +68,7 @@ public class UserService {
 
         // 변경된 값이 없을 때 Error
         if (!updated) {
-            throw new CustomException(ErrorCode.NO_CHANGES_DETECTED);
+            throw new CustomException(CommonErrorCode.NO_CHANGES_DETECTED);
         }
 
         return ResUserUpdateDto.from(user);
@@ -77,7 +78,7 @@ public class UserService {
     @Transactional
     public void delete(Long userId) {
         AuthEntity user = authRepository.findById(userId)
-                .orElseThrow(() -> new CustomException(ErrorCode.AUTH_USER_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
 
         user.delete(auditorAware.getCurrentAuditor().get());
     }
