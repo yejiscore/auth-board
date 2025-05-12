@@ -39,11 +39,11 @@ public class CommentService {
 
         Long authorId = auditorAware.getCurrentAuditor().get();
 
-        PostEntity post = postRepository.findById(postId)
+        postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(CommentErrorCode.COMMENT_POST_NOT_FOUND));
 
         CommentEntity saved = commentRepository.save(
-                CommentEntity.create(post, authorId, content)
+                CommentEntity.create(postId, authorId, content)
         );
 
         return ResCommentPostDto.from(saved);
@@ -73,7 +73,7 @@ public class CommentService {
                 .orElseThrow(() -> new CustomException(CommentErrorCode.COMMENT_NOT_FOUND));
 
         // 해당 댓글이 요청한 게시글에 속해 있는지 확인
-        if (!comment.getPost().getPostId().equals(postId)) {
+        if (!comment.getPostId().equals(postId)) {
             throw new CustomException(CommentErrorCode.COMMENT_POST_MISMATCH);
         }
 
@@ -93,7 +93,7 @@ public class CommentService {
                 .orElseThrow(() -> new CustomException(CommentErrorCode.COMMENT_NOT_FOUND));
 
         // 댓글이 해당 게시글에 속해 있는지 확인
-        if (!comment.getPost().getPostId().equals(postId)) {
+        if (!comment.getPostId().equals(postId)) {
             throw new CustomException(CommentErrorCode.COMMENT_POST_MISMATCH);
         }
 
@@ -124,7 +124,7 @@ public class CommentService {
                 .orElseThrow(() -> new CustomException(CommentErrorCode.COMMENT_NOT_FOUND));
 
         // 댓글이 해당 게시글에 속해 있는지 확인
-        if (!comment.getPost().getPostId().equals(postId)) {
+        if (!comment.getPostId().equals(postId)) {
             throw new CustomException(CommentErrorCode.COMMENT_POST_MISMATCH);
         }
 

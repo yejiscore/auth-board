@@ -22,9 +22,8 @@ public class CommentEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID commentId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id", nullable = false)
-    private PostEntity post;
+    @Column(name = "post_id", nullable = false)
+    private UUID postId;
 
     @Column(nullable = false)
     private Long commentAuthorId;
@@ -33,15 +32,15 @@ public class CommentEntity extends BaseEntity {
     private String commentContent;
 
     @Builder
-    public CommentEntity(PostEntity post, Long commentAuthorId, String commentContent) {
-        this.post = post;
+    public CommentEntity(UUID postId, Long commentAuthorId, String commentContent) {
+        this.postId = postId;
         this.commentAuthorId = commentAuthorId;
         this.commentContent = commentContent;
     }
 
-    public static CommentEntity create(PostEntity post, Long commentAuthorId, String commentContent) {
+    public static CommentEntity create(UUID postId, Long commentAuthorId, String commentContent) {
         return CommentEntity.builder()
-                .post(post)
+                .postId(postId)
                 .commentAuthorId(commentAuthorId)
                 .commentContent(commentContent)
                 .build();
