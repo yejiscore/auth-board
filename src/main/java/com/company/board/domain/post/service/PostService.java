@@ -1,7 +1,5 @@
 package com.company.board.domain.post.service;
 
-import com.company.board.domain.comment.entity.CommentEntity;
-import com.company.board.domain.comment.repository.CommentRepository;
 import com.company.board.domain.post.dto.request.ReqPostPostDto;
 import com.company.board.domain.post.dto.request.ReqPostUpdateDto;
 import com.company.board.domain.post.dto.response.ResPostGetByIdDto;
@@ -9,27 +7,27 @@ import com.company.board.domain.post.dto.response.ResPostGetDto;
 import com.company.board.domain.post.dto.response.ResPostPostDto;
 import com.company.board.domain.post.dto.response.ResPostUpdateDto;
 import com.company.board.domain.post.entity.PostEntity;
+import com.company.board.domain.post.event.PostDeletedEvent;
+import com.company.board.domain.post.exception.PostErrorCode;
 import com.company.board.domain.post.repository.PostRepository;
 import com.company.board.global.exception.CommonErrorCode;
 import com.company.board.global.exception.CustomException;
-import com.company.board.domain.post.exception.PostErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class PostService {
 
     private final PostRepository postRepository;
-    private final CommentRepository commentRepository;
     private final AuditorAware<Long> auditorAware;
+    private final ApplicationEventPublisher eventPublisher;
 
     // 생성
     @Transactional
@@ -57,12 +55,7 @@ public class PostService {
     // 전체 조회
     public ResPostGetDto getAll() {
         List<PostEntity> posts = postRepository.findAll();
-        List<CommentEntity> allComments = commentRepository.findAll();
-
-        Map<UUID, List<CommentEntity>> commentMap = allComments.stream()
-                .collect(Collectors.groupingBy(c -> c.getPost().getPostId()));
-
-        return ResPostGetDto.from(posts, commentMap);
+        return ResPostGetDto.from(posts, null);
     }
 
     // 단건 조회
@@ -70,9 +63,7 @@ public class PostService {
         PostEntity post = postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(PostErrorCode.POST_NOT_FOUND));
 
-        List<CommentEntity> comments = commentRepository.findAllByPost_PostId(post.getPostId());
-
-        return ResPostGetByIdDto.from(post, comments);
+        return ResPostGetByIdDto.from(post, null);
     }
 
     // 수정
@@ -116,14 +107,8 @@ public class PostService {
         }
 
         Long deletedBy = auditorAware.getCurrentAuditor().get();
-
-        // 해당 게시글에 달린 댓글도 삭제
-        List<CommentEntity> comments = commentRepository.findAllByPost_PostId(postId);
-
-        if (!comments.isEmpty()) {
-            comments.forEach(comment -> comment.delete(deletedBy));
-        }
-
         post.delete(deletedBy);
+
+        eventPublisher.publishEvent(new PostDeletedEvent(postId, deletedBy));
     }
 }
