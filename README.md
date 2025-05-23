@@ -9,15 +9,11 @@
 
 <br/>
 
----
-
 ## 📌 ERD (Entity Relationship Diagram)
 
 <img src="./crudboard.png" alt="ERD" width="600"/>
 
 <br/>
-
----
 
 ## 🛠️ 사용 기술 스택
 
