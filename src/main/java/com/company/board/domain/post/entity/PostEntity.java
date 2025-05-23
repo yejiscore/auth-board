@@ -27,6 +27,7 @@ public class PostEntity extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String postTitle;
 
+    @Lob
     @Column(nullable = false)
     private String postContent;
 

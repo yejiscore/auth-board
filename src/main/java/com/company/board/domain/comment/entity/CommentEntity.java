@@ -22,12 +22,13 @@ public class CommentEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID commentId;
 
-    @Column(name = "post_id", nullable = false)
+    @Column(nullable = false)
     private UUID postId;
 
     @Column(nullable = false)
     private Long commentAuthorId;
 
+    @Lob
     @Column(nullable = false)
     private String commentContent;
 
