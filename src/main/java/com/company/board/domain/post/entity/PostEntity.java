@@ -24,7 +24,7 @@ public class PostEntity extends BaseEntity {
     @Column(nullable = false)
     private Long postAuthorId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 100)
     private String postTitle;
 
     @Column(nullable = false)

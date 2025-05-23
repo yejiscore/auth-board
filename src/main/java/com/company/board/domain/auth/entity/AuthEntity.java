@@ -21,7 +21,7 @@ public class AuthEntity extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 30)
     private String nickname;
 
     @Column(nullable = false)
