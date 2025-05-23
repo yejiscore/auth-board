@@ -17,9 +17,14 @@
 
 ## 🛠️ 사용 기술 스택
 
-### 🖥️ Language & Framework
+### 🖥️ Language
 <div>
   <img src="https://img.shields.io/badge/Java_17-007396?style=flat&logo=openjdk&logoColor=white"/>
+  
+</div>
+
+### 🖥️ Framework
+<div>
   <img src="https://img.shields.io/badge/Spring_Boot-6DB33F?logo=spring-boot&logoColor=white"/>
   <img src="https://img.shields.io/badge/Spring_Data_JPA-6DB33F?logo=spring&logoColor=white"/>
   <img src="https://img.shields.io/badge/Spring_Security-6DB33F?logo=spring-security&logoColor=white"/>
@@ -28,16 +33,14 @@
 ### 🗄️ Database & Infra
 <div>
   <img src="https://img.shields.io/badge/PostgreSQL-4169E1?logo=postgresql&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Redis-DC382D?logo=redis&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Docker-2496ED?logo=docker&logoColor=white"/>
 </div>
 
 ### 🔐 Auth
 <div>
-  <img src="https://img.shields.io/badge/JWT-000000?logo=jsonwebtokens&logoColor=white"/>
+  <img src = "https://img.shields.io/badge/JWT-6DB33F?&logo=jsonwebtokens&logoColor=white">
 </div>
 
 ### ⚙️ Dev Tools
 <div>
-  <img src="https://img.shields.io/badge/IntelliJ_IDEA-000000?logo=intellij-idea&logoColor=white"/>
+  <img src = "https://img.shields.io/badge/IntelliJ_IDEA-807d7d.svg?&logo=intellij-idea&logoColor=white">
 </div>
