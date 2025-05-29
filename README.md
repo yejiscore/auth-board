@@ -9,7 +9,7 @@
 
 <br/>
 
-## 📌 ERD (Entity Relationship Diagram)
+## 📌 ERD
 
 <img src="./crudboard.png" alt="ERD" width="600"/>
 
