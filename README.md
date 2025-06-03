@@ -11,7 +11,7 @@
 
 ## 📌 ERD
 
-<img src="./crudboard.png" alt="ERD" width="600"/>
+<img src="docs/images/erd.png" alt="ERD" width="600"/>
 
 <br/>
 
