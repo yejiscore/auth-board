@@ -1,6 +1,6 @@
 package com.company.board.domain.user.service;
 
-import com.company.board.domain.auth.entity.AuthEntity;
+import com.company.board.domain.user.entity.UserEntity;
 import com.company.board.domain.auth.repository.AuthRepository;
 import com.company.board.domain.auth.service.PasswordEncryptionService;
 import com.company.board.domain.user.dto.request.ReqUserUpdateDto;
@@ -27,19 +27,19 @@ public class UserService {
     private final AuditorAware<Long> auditorAware;
 
     public ResUserGetDto getAll() {
-        List<AuthEntity> users = authRepository.findAll();
+        List<UserEntity> users = authRepository.findAll();
         return ResUserGetDto.from(users);
     }
 
     public ResUserGetByIdDto getById(Long userId) {
-        AuthEntity user = authRepository.findById(userId)
+        UserEntity user = authRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
         return ResUserGetByIdDto.from(user);
     }
 
     @Transactional
     public ResUserUpdateDto update(Long userId, ReqUserUpdateDto request) {
-        AuthEntity user = authRepository.findById(userId)
+        UserEntity user = authRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
 
         // 변경이 제대로 이루어져있는 확인
@@ -77,7 +77,7 @@ public class UserService {
     // 삭제
     @Transactional
     public void delete(Long userId) {
-        AuthEntity user = authRepository.findById(userId)
+        UserEntity user = authRepository.findById(userId)
                 .orElseThrow(() -> new CustomException(UserErrorCode.USER_NOT_FOUND));
 
         user.delete(auditorAware.getCurrentAuditor().get());

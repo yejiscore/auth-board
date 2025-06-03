@@ -1,6 +1,6 @@
 package com.company.board.domain.user.dto.response;
 
-import com.company.board.domain.auth.entity.AuthEntity;
+import com.company.board.domain.user.entity.UserEntity;
 import com.company.board.global.model.Role;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +22,7 @@ public class ResUserGetDto {
         private Role role;
     }
 
-    public static ResUserGetDto from(List<AuthEntity> authEntities) {
+    public static ResUserGetDto from(List<UserEntity> authEntities) {
         List<User> userList = authEntities.stream()
                 .map(authEntity -> User.builder()
                         .userId(authEntity.getUserId())

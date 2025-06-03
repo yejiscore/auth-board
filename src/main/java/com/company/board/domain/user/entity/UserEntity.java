@@ -1,4 +1,4 @@
-package com.company.board.domain.auth.entity;
+package com.company.board.domain.user.entity;
 
 import com.company.board.domain.auth.service.PasswordEncryptionService;
 import com.company.board.global.entity.BaseEntity;
@@ -13,9 +13,9 @@ import org.hibernate.annotations.SQLRestriction;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@Table(name = "p_auth")
+@Table(name = "p_user")
 @SQLRestriction("deleted_at IS NULL")
-public class AuthEntity extends BaseEntity {
+public class UserEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,14 +32,14 @@ public class AuthEntity extends BaseEntity {
     private Role role;
 
     @Builder
-    public AuthEntity(String nickname, String password, Role role) {
+    public UserEntity(String nickname, String password, Role role) {
         this.nickname = nickname;
         this.password = password;
         this.role = role;
     }
 
-    public static AuthEntity create(String nickname, String encodedPassword, Role role) {
-        return AuthEntity.builder()
+    public static UserEntity create(String nickname, String encodedPassword, Role role) {
+        return UserEntity.builder()
                 .nickname(nickname)
                 .password(encodedPassword)
                 .role(role)

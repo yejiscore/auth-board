@@ -1,6 +1,6 @@
 package com.company.board.domain.auth.dto.response;
 
-import com.company.board.domain.auth.entity.AuthEntity;
+import com.company.board.domain.user.entity.UserEntity;
 import com.company.board.global.model.Role;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,12 +19,12 @@ public class ResAuthSigninPostDto {
         private Role role;
     }
 
-    public static ResAuthSigninPostDto from(AuthEntity authEntity) {
+    public static ResAuthSigninPostDto from(UserEntity userEntity) {
         return ResAuthSigninPostDto.builder()
                 .user(User.builder()
-                        .userId(authEntity.getUserId())
-                        .nickname(authEntity.getNickname())
-                        .role(authEntity.getRole())
+                        .userId(userEntity.getUserId())
+                        .nickname(userEntity.getNickname())
+                        .role(userEntity.getRole())
                         .build())
                 .build();
     }

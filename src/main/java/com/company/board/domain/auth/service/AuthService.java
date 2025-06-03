@@ -4,7 +4,7 @@ import com.company.board.domain.auth.dto.request.ReqAuthSigninPostDto;
 import com.company.board.domain.auth.dto.request.ReqAuthSignupPostDto;
 import com.company.board.domain.auth.dto.response.ResAuthSigninPostDto;
 import com.company.board.domain.auth.dto.response.ResAuthSignupPostDto;
-import com.company.board.domain.auth.entity.AuthEntity;
+import com.company.board.domain.user.entity.UserEntity;
 import com.company.board.domain.auth.repository.AuthRepository;
 import com.company.board.global.exception.CustomException;
 import com.company.board.domain.auth.exception.AuthErrorCode;
@@ -27,8 +27,8 @@ public class AuthService {
 
         String encodedPassword = passwordEncryptionService.encode(request.getUser().getPassword());
 
-        AuthEntity saved = authRepository.save(
-                AuthEntity.create(
+        UserEntity saved = authRepository.save(
+                UserEntity.create(
                         request.getUser().getNickname(),
                         encodedPassword,
                         request.getUser().getRole()
@@ -39,7 +39,7 @@ public class AuthService {
     }
 
     public ResAuthSigninPostDto signIn(ReqAuthSigninPostDto request) {
-        AuthEntity auth = authRepository.findByNickname(request.getUser().getNickname());
+        UserEntity auth = authRepository.findByNickname(request.getUser().getNickname());
 
         if (auth == null) {
             throw new CustomException(AuthErrorCode.AUTH_USER_NOT_FOUND);
