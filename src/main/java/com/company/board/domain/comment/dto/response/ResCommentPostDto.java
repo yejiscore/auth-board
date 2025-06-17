@@ -25,7 +25,7 @@ public class ResCommentPostDto {
         return ResCommentPostDto.builder()
                 .comment(Comment.builder()
                         .commentId(commentEntity.getCommentId())
-                        .postId(commentEntity.getPost().getPostId())
+                        .postId(commentEntity.getPostId())
                         .commentAuthorId(commentEntity.getCommentAuthorId())
                         .commentContent(commentEntity.getCommentContent())
                         .build())
