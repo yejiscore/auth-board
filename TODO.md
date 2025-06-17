@@ -51,7 +51,6 @@
 - [X] JwtFilter
 - [X] CustomUserDetails
 - [X] CustomUserDetailsService
-- [X] CustomUserDetails
 - [X] 로그인 시 응답 DTO에 토큰 값 반환하기
 
 <br>
