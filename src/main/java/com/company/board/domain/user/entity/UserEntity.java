@@ -46,6 +46,14 @@ public class UserEntity extends BaseEntity {
                 .build();
     }
 
+    public static UserEntity of(Long userId, String nickname, Role role) {
+        UserEntity user = new UserEntity();
+        user.userId = userId;
+        user.nickname = nickname;
+        user.role = role;
+        return user;
+    }
+
     public boolean matchPassword(String rawPassword, PasswordEncryptionService encoder) {
         return encoder.matches(rawPassword, this.password);
     }
