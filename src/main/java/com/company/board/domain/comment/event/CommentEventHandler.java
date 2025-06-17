@@ -19,7 +19,7 @@ public class CommentEventHandler {
     @EventListener
     @Transactional
     public void handle(PostDeletedEvent event) {
-        List<CommentEntity> comments = commentRepository.findAllByPost_PostId(event.postId());
+        List<CommentEntity> comments = commentRepository.findAllByPostId(event.postId());
         comments.forEach(comment -> comment.delete(event.deletedBy()));
     }
 }

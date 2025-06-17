@@ -57,7 +57,7 @@ public class CommentService {
         postRepository.findById(postId)
                 .orElseThrow(() -> new CustomException(CommentErrorCode.COMMENT_POST_NOT_FOUND));
 
-        List<CommentEntity> comments = commentRepository.findAllByPost_PostId(postId);
+        List<CommentEntity> comments = commentRepository.findAllByPostId(postId);
         return ResCommentGetDto.from(comments);
     }
 
