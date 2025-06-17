@@ -9,6 +9,8 @@ import lombok.Getter;
 @Builder
 public class ResAuthSigninPostDto {
 
+    private String accessToken;
+    private String refreshToken;
     private User user;
 
     @Getter
@@ -19,8 +21,10 @@ public class ResAuthSigninPostDto {
         private Role role;
     }
 
-    public static ResAuthSigninPostDto from(UserEntity userEntity) {
+    public static ResAuthSigninPostDto from(String accessToken, String refreshToken, UserEntity userEntity) {
         return ResAuthSigninPostDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .user(User.builder()
                         .userId(userEntity.getUserId())
                         .nickname(userEntity.getNickname())
