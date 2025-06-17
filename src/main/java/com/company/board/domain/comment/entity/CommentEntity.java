@@ -1,6 +1,5 @@
 package com.company.board.domain.comment.entity;
 
-import com.company.board.domain.post.entity.PostEntity;
 import com.company.board.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -28,8 +27,7 @@ public class CommentEntity extends BaseEntity {
     @Column(nullable = false)
     private Long commentAuthorId;
 
-    @Lob
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String commentContent;
 
     @Builder
