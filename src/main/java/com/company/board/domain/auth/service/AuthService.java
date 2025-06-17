@@ -8,6 +8,7 @@ import com.company.board.domain.user.entity.UserEntity;
 import com.company.board.domain.auth.repository.AuthRepository;
 import com.company.board.global.exception.CustomException;
 import com.company.board.domain.auth.exception.AuthErrorCode;
+import com.company.board.global.security.jwt.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ public class AuthService {
 
     private final AuthRepository authRepository;
     private final PasswordEncryptionService passwordEncryptionService;
+    private final JwtUtil jwtUtil;
 
     @Transactional
     public ResAuthSignupPostDto signUp(ReqAuthSignupPostDto request) {
@@ -38,18 +40,27 @@ public class AuthService {
         return ResAuthSignupPostDto.from(saved);
     }
 
+    @Transactional(readOnly = true)
     public ResAuthSigninPostDto signIn(ReqAuthSigninPostDto request) {
-        UserEntity auth = authRepository.findByNickname(request.getUser().getNickname())
+        UserEntity user = authRepository.findByNickname(request.getUser().getNickname())
                 .orElseThrow(() -> new CustomException(AuthErrorCode.AUTH_USER_NOT_FOUND));
 
-        if (auth == null) {
-            throw new CustomException(AuthErrorCode.AUTH_USER_NOT_FOUND);
-        }
-
-        if (!auth.matchPassword(request.getUser().getPassword(), passwordEncryptionService)) {
+        if (!user.matchPassword(request.getUser().getPassword(), passwordEncryptionService)) {
             throw new CustomException(AuthErrorCode.AUTH_PASSWORD_MISMATCH);
         }
 
-        return ResAuthSigninPostDto.from(auth);
+        String accessToken = jwtUtil.createAccessToken(
+                user.getUserId(),
+                user.getNickname(),
+                user.getRole().name()
+        );
+
+        String refreshToken = jwtUtil.createRefreshToken(
+                user.getUserId(),
+                user.getNickname(),
+                user.getRole().name()
+        );
+
+        return ResAuthSigninPostDto.from(accessToken, refreshToken, user);
     }
 }
