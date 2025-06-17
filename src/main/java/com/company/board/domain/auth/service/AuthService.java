@@ -39,7 +39,8 @@ public class AuthService {
     }
 
     public ResAuthSigninPostDto signIn(ReqAuthSigninPostDto request) {
-        UserEntity auth = authRepository.findByNickname(request.getUser().getNickname());
+        UserEntity auth = authRepository.findByNickname(request.getUser().getNickname())
+                .orElseThrow(() -> new CustomException(AuthErrorCode.AUTH_USER_NOT_FOUND));
 
         if (auth == null) {
             throw new CustomException(AuthErrorCode.AUTH_USER_NOT_FOUND);
